@@ -1,5 +1,8 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:google_keep/views/bottom_nav_screens/canvas_screen.dart';
+import 'package:google_keep/views/bottom_nav_screens/capture_image.dart';
+import 'package:google_keep/views/bottom_nav_screens/list_screen.dart';
+import 'package:google_keep/views/bottom_nav_screens/record_audio.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -9,24 +12,109 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final PageStorageBucket bucket = PageStorageBucket();
+  final List<Widget> bottomNavigationScreens = [
+    CanvasScreen(),
+    CaptureImageScreen(),
+    ListScreen(),
+    RecordAudioScreen()
+  ];
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      key: _drawerKey,
-      body: ListView(
-        children: [
-          SafeArea(
-              child: Padding(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 18),
-            child: Column(
-              children: [KeepAppBar(size, context)],
+        key: _drawerKey,
+        body: ListView(
+          children: [
+            SafeArea(
+                child: Padding(
+              padding: EdgeInsets.only(left: 15, right: 15, top: 18),
+              child: Column(
+                children: [KeepAppBar(size, context)],
+              ),
+            ))
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(Icons.add),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          notchMargin: 10,
+          child: Container(
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // MaterialButton(
+                    //     // minWidth: 40,
+                    //     onPressed: () {
+                    //       setState(() {});
+                    //     },
+                    //     child: Icon(Icons.check_box_outlined)),
+                    // MaterialButton(
+                    //     // minWidth: 40,
+                    //     onPressed: () {
+                    //       setState(() {});
+                    //     },
+                    //     child: Icon(Icons.brush_outlined)),
+                    // MaterialButton(
+                    //     // minWidth: 40,
+                    //     onPressed: () {
+                    //       setState(() {});
+                    //     },
+                    //     child: Icon(Icons.mic)),
+                    // MaterialButton(
+                    //     // minWidth: 40,
+                    //     onPressed: () {
+                    //       setState(() {});
+                    //     },
+                    //     child: Icon(Icons.image_outlined)),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, top: 8),
+                      child: GestureDetector(
+                          child: Icon(Icons.check_box_outlined)),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, top: 8),
+                      child: GestureDetector(
+                        child: Icon(Icons.brush_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, top: 8),
+                      child: GestureDetector(
+                        child: Icon(Icons.mic),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, top: 8),
+                      child: GestureDetector(
+                        child: Icon(Icons.image_outlined),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-          ))
-        ],
-      ),
-    );
+          ),
+        ));
   }
 
   Container KeepAppBar(Size size, BuildContext context) {
