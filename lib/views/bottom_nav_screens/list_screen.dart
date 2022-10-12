@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListScreen extends StatefulWidget {
+  static const routeName = '/list-screen';
   const ListScreen({Key? key}) : super(key: key);
 
   @override

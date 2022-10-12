@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RecordAudioScreen extends StatefulWidget {
+  static const routeName = '/record-audio';
   const RecordAudioScreen({Key? key}) : super(key: key);
 
   @override

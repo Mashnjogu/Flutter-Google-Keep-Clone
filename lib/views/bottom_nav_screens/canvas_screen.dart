@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CanvasScreen extends StatefulWidget {
+  static const routeName = '/new-canvas';
   const CanvasScreen({Key? key}) : super(key: key);
 
   @override

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_keep/utils/drawer_items.dart';
 import 'package:google_keep/views/bottom_nav_screens/canvas_screen.dart';
 import 'package:google_keep/views/bottom_nav_screens/capture_image.dart';
 import 'package:google_keep/views/bottom_nav_screens/list_screen.dart';
+import 'package:google_keep/views/bottom_nav_screens/new_note.dart';
 import 'package:google_keep/views/bottom_nav_screens/record_audio.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,12 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+        drawer: Drawer(
+          child: DrawerItems(),
+        ),
         key: _drawerKey,
         body: ListView(
           children: [
             SafeArea(
                 child: Padding(
-              padding: EdgeInsets.only(left: 15, right: 15, top: 18),
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 18),
               child: Column(
                 children: [KeepAppBar(size, context)],
               ),
@@ -37,7 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(NewNote.routeName);
+          },
           child: Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -80,6 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0, top: 8),
                       child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(ListScreen.routeName);
+                          },
                           child: Icon(Icons.check_box_outlined)),
                     ),
                     SizedBox(
@@ -88,6 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0, top: 8),
                       child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(CanvasScreen.routeName);
+                        },
                         child: Icon(Icons.brush_outlined),
                       ),
                     ),
@@ -97,6 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0, top: 8),
                       child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(RecordAudioScreen.routeName);
+                        },
                         child: Icon(Icons.mic),
                       ),
                     ),
@@ -106,6 +125,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0, top: 8),
                       child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(CaptureImageScreen.routeName);
+                        },
                         child: Icon(Icons.image_outlined),
                       ),
                     ),
@@ -118,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Container KeepAppBar(Size size, BuildContext context) {
+    bool tappedListIcon = false;
     return Container(
       width: size.width,
       height: 55,
@@ -146,9 +170,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Icon(Icons.menu),
               ),
-              const SizedBox(
-                width: 20,
-              ),
+              // const SizedBox(
+              //   width: 20,
+              // ),
               const Text(
                 "Search your notes",
                 style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400),
@@ -157,11 +181,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 20,
               ),
               GestureDetector(
-                onTap: () {
-                  _drawerKey.currentState!.openDrawer();
-                },
-                child: Icon(Icons.view_list),
-              ),
+                  onTap: () {
+                    setState(() {
+                      tappedListIcon = !tappedListIcon;
+                    });
+                  },
+                  child: Icon(
+                    (tappedListIcon = true) ? Icons.view_list : Icons.grid_3x3,
+                  )
+                  // tappedListIcon
+                  //     ? Icon(Icons.view_list)
+                  //     : Icon(Icons.grid_3x3),
+                  ),
               const SizedBox(
                 width: 10,
               ),

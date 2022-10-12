@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CaptureImageScreen extends StatefulWidget {
+  static const routeName = '/capture-image';
   const CaptureImageScreen({Key? key}) : super(key: key);
 
   @override
