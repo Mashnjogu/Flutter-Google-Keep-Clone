@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_keep/utils/modalbottom_sheet.dart';
+import 'package:google_keep/utils/notesappbar.dart';
 
 class NewNote extends StatefulWidget {
   static const routeName = '/new-note';
@@ -25,22 +26,7 @@ class _NewNoteState extends State<NewNote> {
                   SizedBox(
                     height: size.height * 0.055,
                   ),
-                  Row(
-                    children: [
-                      GestureDetector(child: Icon(Icons.arrow_back)),
-                      Spacer(),
-                      GestureDetector(child: Icon(Icons.push_pin_outlined)),
-                      SizedBox(
-                        width: 15.0,
-                      ),
-                      GestureDetector(
-                          child: Icon(Icons.notification_add_outlined)),
-                      SizedBox(
-                        width: 15.0,
-                      ),
-                      GestureDetector(child: Icon(Icons.archive_outlined))
-                    ],
-                  ),
+                  notesAppBar(),
                   SizedBox(
                     height: 29,
                   ),
@@ -80,9 +66,7 @@ class _NewNoteState extends State<NewNote> {
                         onTap: () {
                           bottomSheet(context);
                         },
-                        child: Icon(
-                          Icons.more_vert
-                          ))
+                        child: Icon(Icons.more_vert))
                   ],
                 )),
           )

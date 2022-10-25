@@ -5,7 +5,7 @@ Future<dynamic> bottomSheet(BuildContext context) {
       context: context,
       builder: (BuildContext context) {
         return Column(
-          // mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             bottomSheetItem(
                 itemName: "Delete", itemIcon: Icons.delete, onTapped: () {}),
@@ -28,14 +28,23 @@ Future<dynamic> bottomSheet(BuildContext context) {
       });
 }
 
-Row bottomSheetItem(
+Padding bottomSheetItem(
     {required String itemName,
     required IconData itemIcon,
     required Function onTapped}) {
-  return Row(
-    children: [
-      GestureDetector(onTap: () => onTapped, child: Icon(itemIcon)),
-      Text(itemName)
-    ],
+  return Padding(
+    padding: const EdgeInsets.all(10.0),
+    child: GestureDetector(
+      onTap: (() => onTapped),
+      child: Row(
+        children: [
+          Icon(itemIcon),
+          SizedBox(
+            width: 20,
+          ),
+          Text(itemName)
+        ],
+      ),
+    ),
   );
 }

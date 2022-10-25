@@ -14,7 +14,11 @@ class DrawerItems extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: Align(
-              alignment: Alignment.bottomLeft, child: Text("Google Keep")),
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                "Google Keep",
+                style: TextStyle(fontSize: 22),
+              )),
         ),
 
         Padding(
@@ -25,7 +29,10 @@ class DrawerItems extends StatelessWidget {
                 Icon(Icons.lightbulb_outline),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: Text("Notes"),
+                  child: Text(
+                    "Notes",
+                    style: TextStyle(fontSize: 16),
+                  ),
                 )
               ],
             ),
@@ -59,7 +66,7 @@ class DrawerItems extends StatelessWidget {
             Icon(icon),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Text(text),
+              child: Text(text, style: TextStyle(fontSize: 16),),
             )
           ],
         ),
