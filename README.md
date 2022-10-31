@@ -1,6 +1,7 @@
 # google_keep
 
-A new Flutter project.
+An attempt to learn flutter by trying to build an app similar to google keep notes.
+-Currently In Progress.
 
 ## Getting Started
 
