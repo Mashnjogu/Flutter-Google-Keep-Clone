@@ -11,8 +11,9 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  static List<String> friendsList = [];
+  static List<String?> listItem = [null];
   final _formKey = GlobalKey<FormState>();
+  bool value = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,45 +39,38 @@ class _ListScreenState extends State<ListScreen> {
                         height: 29,
                       ),
                       SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                        hintText: "Title",
-                                        hintStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                        border: InputBorder.none),
-                                    maxLines: null,
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                          hintText: "Title",
+                                          hintStyle: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                          border: InputBorder.none),
+                                      maxLines: null,
+                                    ),
                                   ),
-                                ),
-                                GestureDetector(
-                                    child: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Icon(Icons.more_vert),
-                                ))
-                              ],
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Form(
-                              key: _formKey,
-                              child: Padding(
-                                padding: EdgeInsets.only(right: 32.0),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Add Items"),
-                                      ...getItemList()
-                                    ]),
+                                  GestureDetector(
+                                      child: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Icon(Icons.more_vert),
+                                  ))
+                                ],
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                height: 16,
+                              ),
+                              ..._getItemList(),
+                              ElevatedButton(
+                                  onPressed: () {}, child: Text("save"))
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -107,32 +101,49 @@ class _ListScreenState extends State<ListScreen> {
     ));
   }
 
-  List<Widget> getItemList() {
-    List<Widget> itemTextFields = [];
-    for (int i = 0; i < friendsList.length; i++) {
-      itemTextFields.add(Padding(
-        padding: EdgeInsets.symmetric(vertical: 16),
+  List<Widget> _getItemList() {
+    List<Widget> itemTextFieldList = [];
+    for (int i = 0; i < listItem.length; i++) {
+      itemTextFieldList.add(Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6.0),
         child: Row(
           children: [
-            Expanded(
-                child: ListItemTextField(
-              index: i,
-            )),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(Icons.remove)
+            Checkbox(
+                value: value,
+                onChanged: (value) {
+                  setState(() {
+                    this.value = value!;
+                  });
+                }),
+            Expanded(child: ListItemTextField(i)),
+            _removeButton(i == listItem.length - 1, i)
           ],
         ),
       ));
     }
-    return itemTextFields;
+    return itemTextFieldList;
+  }
+
+  Widget _removeButton(bool remove, int index) {
+    return InkWell(
+      onTap: () {
+        if (remove) {
+          listItem.removeAt(0);
+        }
+        setState(() {});
+      },
+      child: Container(
+        height: 30,
+        width: 30,
+        child: Icon(Icons.remove),
+      ),
+    );
   }
 }
 
 class ListItemTextField extends StatefulWidget {
-  int index;
-  ListItemTextField({required this.index});
+  final int index;
+  const ListItemTextField(this.index);
 
   @override
   State<ListItemTextField> createState() => _ListItemTextFieldState();
@@ -155,15 +166,16 @@ class _ListItemTextFieldState extends State<ListItemTextField> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback(((timeStamp) {
-      _listItemController.text =
-          _ListScreenState.friendsList[widget.index] ?? '';
-    }));
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _listItemController.text = _ListScreenState.listItem[widget.index] ?? '';
+    });
     return TextFormField(
+      maxLines: null,
       controller: _listItemController,
-      onChanged: ((value) {}),
-      decoration: InputDecoration(hintText: "Enter your name"),
-      validator: ((value) {}),
+      // save text field data in listItem at index
+      // whenever text field value changes
+      onChanged: ((value) => _ListScreenState.listItem[widget.index] = value),
+      decoration: InputDecoration(hintText: "List Item"),
     );
   }
 }
