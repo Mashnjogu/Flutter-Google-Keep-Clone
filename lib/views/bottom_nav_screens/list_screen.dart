@@ -11,6 +11,9 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+  static List<String> friendsList = [];
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -57,7 +60,22 @@ class _ListScreenState extends State<ListScreen> {
                                 ))
                               ],
                             ),
-                            
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Form(
+                              key: _formKey,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 32.0),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Add Items"),
+                                      ...getItemList()
+                                    ]),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -87,5 +105,65 @@ class _ListScreenState extends State<ListScreen> {
         ],
       ),
     ));
+  }
+
+  List<Widget> getItemList() {
+    List<Widget> itemTextFields = [];
+    for (int i = 0; i < friendsList.length; i++) {
+      itemTextFields.add(Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Row(
+          children: [
+            Expanded(
+                child: ListItemTextField(
+              index: i,
+            )),
+            SizedBox(
+              width: 10,
+            ),
+            Icon(Icons.remove)
+          ],
+        ),
+      ));
+    }
+    return itemTextFields;
+  }
+}
+
+class ListItemTextField extends StatefulWidget {
+  int index;
+  ListItemTextField({required this.index});
+
+  @override
+  State<ListItemTextField> createState() => _ListItemTextFieldState();
+}
+
+class _ListItemTextFieldState extends State<ListItemTextField> {
+  late TextEditingController _listItemController;
+
+  @override
+  void initState() {
+    _listItemController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _listItemController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback(((timeStamp) {
+      _listItemController.text =
+          _ListScreenState.friendsList[widget.index] ?? '';
+    }));
+    return TextFormField(
+      controller: _listItemController,
+      onChanged: ((value) {}),
+      decoration: InputDecoration(hintText: "Enter your name"),
+      validator: ((value) {}),
+    );
   }
 }
