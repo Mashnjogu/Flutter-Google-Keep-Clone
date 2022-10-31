@@ -116,7 +116,7 @@ class _ListScreenState extends State<ListScreen> {
                   });
                 }),
             Expanded(child: ListItemTextField(i)),
-            _removeButton(i == listItem.length - 1, i)
+            _removeButton(i)
           ],
         ),
       ));
@@ -124,18 +124,17 @@ class _ListScreenState extends State<ListScreen> {
     return itemTextFieldList;
   }
 
-  Widget _removeButton(bool remove, int index) {
+  Widget _removeButton(int index) {
     return InkWell(
       onTap: () {
-        if (remove) {
-          listItem.removeAt(0);
-        }
+        listItem.removeAt(index);
+
         setState(() {});
       },
       child: Container(
         height: 30,
         width: 30,
-        child: Icon(Icons.remove),
+        child: Icon(Icons.close),
       ),
     );
   }
@@ -176,6 +175,9 @@ class _ListItemTextFieldState extends State<ListItemTextField> {
       // whenever text field value changes
       onChanged: ((value) => _ListScreenState.listItem[widget.index] = value),
       decoration: InputDecoration(hintText: "List Item"),
+      onTap: () {
+        _ListScreenState.listItem.insert(widget.index + 1, null);
+      },
     );
   }
 }
