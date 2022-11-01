@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_keep/utils/modalbottom_sheet.dart';
 import 'package:google_keep/utils/notesappbar.dart';
+import 'package:google_keep/views/bottom_nav_screens/new_note.dart';
+
+enum MenuItem { item1 }
 
 class ListScreen extends StatefulWidget {
   static const routeName = '/list-screen';
@@ -14,6 +17,7 @@ class _ListScreenState extends State<ListScreen> {
   static List<String?> listItem = [null];
   final _formKey = GlobalKey<FormState>();
   bool value = false;
+  bool isListItemTapped = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +60,18 @@ class _ListScreenState extends State<ListScreen> {
                                       maxLines: null,
                                     ),
                                   ),
-                                  GestureDetector(
-                                      child: Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Icon(Icons.more_vert),
-                                  ))
+                                  PopupMenuButton(
+                                      onSelected: ((value) {
+                                        if (value == MenuItem.item1) {
+                                          Navigator.of(context).popAndPushNamed(
+                                              NewNote.routeName);
+                                        }
+                                      }),
+                                      itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                                value: MenuItem.item1,
+                                                child: Text("Hide checkboxes"))
+                                          ]),
                                 ],
                               ),
                               SizedBox(
@@ -101,43 +112,59 @@ class _ListScreenState extends State<ListScreen> {
     ));
   }
 
+  Widget displayCloseButton() {
+    //if the row is tapped add the close iconbutton
+    return Icon(Icons.close);
+  }
+
   List<Widget> _getItemList() {
     List<Widget> itemTextFieldList = [];
     for (int i = 0; i < listItem.length; i++) {
       itemTextFieldList.add(Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6.0),
-        child: Row(
-          children: [
-            Checkbox(
-                value: value,
-                onChanged: (value) {
-                  setState(() {
-                    this.value = value!;
-                  });
-                }),
-            Expanded(child: ListItemTextField(i)),
-            _removeButton(i)
-          ],
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              isListItemTapped = !isListItemTapped;
+              print("The value of isTapped is: $isListItemTapped");
+            });
+            print("I have just tapped on the listItem");
+          },
+          child: Row(
+            children: [
+              Checkbox(
+                  value: value,
+                  onChanged: (value) {
+                    setState(() {
+                      this.value = value!;
+                    });
+                  }),
+              Expanded(child: ListItemTextField(i)),
+              displayCloseButton(),
+
+              // _removeButton(i)
+            ],
+          ),
         ),
       ));
     }
     return itemTextFieldList;
   }
 
-  Widget _removeButton(int index) {
-    return InkWell(
-      onTap: () {
-        listItem.removeAt(index);
+  // Widget _removeButton(int index) {
+  //   return InkWell(
+  //     onTap: () {
+  //       listItem.removeAt(index);
 
-        setState(() {});
-      },
-      child: Container(
-        height: 30,
-        width: 30,
-        child: Icon(Icons.close),
-      ),
-    );
-  }
+  //       setState(() {});
+  //     },
+  //     child: Container(
+  //       height: 30,
+  //       width: 30,
+  //       child: Icon(Icons.close),
+  //     ),
+  //   );
+  // }
 }
 
 class ListItemTextField extends StatefulWidget {
@@ -174,10 +201,27 @@ class _ListItemTextFieldState extends State<ListItemTextField> {
       // save text field data in listItem at index
       // whenever text field value changes
       onChanged: ((value) => _ListScreenState.listItem[widget.index] = value),
-      decoration: InputDecoration(hintText: "List Item"),
+      decoration:
+          InputDecoration(hintText: "List Item", border: InputBorder.none),
       onTap: () {
-        _ListScreenState.listItem.insert(widget.index + 1, null);
+        // _ListScreenState.listItem.insert(widget.index + 1, null);
+        _removeButton(widget.index);
       },
+    );
+  }
+
+  Widget _removeButton(int index) {
+    return InkWell(
+      onTap: () {
+        _ListScreenState.listItem.removeAt(index);
+
+        setState(() {});
+      },
+      child: Container(
+        height: 30,
+        width: 30,
+        child: Icon(Icons.close),
+      ),
     );
   }
 }
