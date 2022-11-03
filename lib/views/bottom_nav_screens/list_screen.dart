@@ -21,6 +21,7 @@ class _ListScreenState extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("The value of isTapped again is: $isListItemTapped");
     var size = MediaQuery.of(context).size;
     return Scaffold(
         body: Padding(
@@ -112,42 +113,44 @@ class _ListScreenState extends State<ListScreen> {
     ));
   }
 
-  Widget displayCloseButton() {
+  Widget displayCloseButton(bool isTapped) {
     //if the row is tapped add the close iconbutton
-    return Icon(Icons.close);
+    return Visibility(visible: isListItemTapped, child: Icon(Icons.close));
+    // return Icon(isTapped ? Icons.close : null);
+  }
+
+  void changeVisibility() {
+    setState(() {
+      isListItemTapped = !isListItemTapped;
+    });
   }
 
   List<Widget> _getItemList() {
+    print("The value of isTappedThrice is: $isListItemTapped");
     List<Widget> itemTextFieldList = [];
     for (int i = 0; i < listItem.length; i++) {
       itemTextFieldList.add(Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6.0),
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              isListItemTapped = !isListItemTapped;
-              print("The value of isTapped is: $isListItemTapped");
-            });
-            print("I have just tapped on the listItem");
-          },
-          child: Row(
-            children: [
-              Checkbox(
-                  value: value,
-                  onChanged: (value) {
-                    setState(() {
-                      this.value = value!;
-                    });
-                  }),
-              Expanded(child: ListItemTextField(i)),
-              displayCloseButton(),
+        child: Row(
+          children: [
+            Checkbox(
+                value: value,
+                onChanged: (value) {
+                  setState(() {
+                    this.value = value!;
+                  });
+                }),
+            Expanded(
+                child: InkWell(
+                    onTap: changeVisibility, child: ListItemTextField(i))),
+            displayCloseButton(isListItemTapped),
 
-              // _removeButton(i)
-            ],
-          ),
+            // _removeButton(i)
+          ],
         ),
       ));
     }
+    print("The value of isTapped fourth is: $isListItemTapped");
     return itemTextFieldList;
   }
 
