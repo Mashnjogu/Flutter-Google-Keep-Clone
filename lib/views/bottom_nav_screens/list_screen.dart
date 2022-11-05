@@ -79,8 +79,6 @@ class _ListScreenState extends State<ListScreen> {
                                 height: 16,
                               ),
                               ..._getItemList(),
-                              ElevatedButton(
-                                  onPressed: () {}, child: Text("save"))
                             ],
                           ),
                         ),
@@ -144,8 +142,7 @@ class _ListScreenState extends State<ListScreen> {
                 child: InkWell(
                     onTap: changeVisibility, child: ListItemTextField(i))),
             displayCloseButton(isListItemTapped),
-
-            // _removeButton(i)
+            _removeButton(i)
           ],
         ),
       ));
@@ -154,20 +151,20 @@ class _ListScreenState extends State<ListScreen> {
     return itemTextFieldList;
   }
 
-  // Widget _removeButton(int index) {
-  //   return InkWell(
-  //     onTap: () {
-  //       listItem.removeAt(index);
+  Widget _removeButton(int index) {
+    return InkWell(
+      onTap: () {
+        listItem.removeAt(index);
 
-  //       setState(() {});
-  //     },
-  //     child: Container(
-  //       height: 30,
-  //       width: 30,
-  //       child: Icon(Icons.close),
-  //     ),
-  //   );
-  // }
+        setState(() {});
+      },
+      child: Container(
+        height: 30,
+        width: 30,
+        child: Icon(Icons.close),
+      ),
+    );
+  }
 }
 
 class ListItemTextField extends StatefulWidget {
@@ -207,7 +204,7 @@ class _ListItemTextFieldState extends State<ListItemTextField> {
       decoration:
           InputDecoration(hintText: "List Item", border: InputBorder.none),
       onTap: () {
-        // _ListScreenState.listItem.insert(widget.index + 1, null);
+        _ListScreenState.listItem.insert(widget.index + 1, null);
         _removeButton(widget.index);
       },
     );
