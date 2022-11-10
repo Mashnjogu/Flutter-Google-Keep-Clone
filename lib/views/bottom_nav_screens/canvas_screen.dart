@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class CanvasScreen extends StatefulWidget {
@@ -10,6 +12,8 @@ class CanvasScreen extends StatefulWidget {
 
 class _CanvasScreenState extends State<CanvasScreen> {
   int _currentIndex = 0;
+  List<Offset?> points = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +21,26 @@ class _CanvasScreenState extends State<CanvasScreen> {
         title: Text("Canvas Screen"),
         actions: [],
       ),
-      body: Container(
-        child: CustomPaint(
-          painter: MyCustomPainter(),
+      body: GestureDetector(
+        onPanDown: ((details) {
+          setState(() {
+            points.add(details.localPosition);
+          });
+        }),
+        onPanEnd: ((details) {
+          setState(() {
+            points.add(null);
+          });
+        }),
+        onPanUpdate: ((details) {
+          setState(() {
+            points.add(details.localPosition);
+          });
+        }),
+        child: Container(
+          child: CustomPaint(
+            painter: MyCustomPainter(points: points),
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -45,9 +66,27 @@ class _CanvasScreenState extends State<CanvasScreen> {
 }
 
 class MyCustomPainter extends CustomPainter {
+  List<Offset?> points;
+  MyCustomPainter({required this.points});
   @override
   void paint(Canvas canvas, Size size) {
-    Offset startingPoint = Offset(0, 0);
+    Paint background = Paint()..color = Colors.white;
+    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    canvas.drawRect(rect, background);
+
+    Paint paint = Paint();
+    paint.color = Colors.black;
+    paint.strokeWidth = 2.0;
+    paint.isAntiAlias = true;
+    paint.strokeCap = StrokeCap.round;
+
+    for (int x = 0; x < points.length - 1; x++) {
+      if (points[x] != null && points[x + 1] != null) {
+        canvas.drawLine(points[x]!, points[x + 1]!, paint);
+      } else if (points[x] != null && points[x + 1] == null) {
+        canvas.drawPoints(PointMode.points, [points[x]!], paint);
+      }
+    }
   }
 
   @override

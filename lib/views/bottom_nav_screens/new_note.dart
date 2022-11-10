@@ -60,7 +60,7 @@ class _NewNoteState extends State<NewNote> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(child: Icon(Icons.format_paint_sharp)),
+                    GestureDetector(child: Icon(Icons.color_lens)),
                     GestureDetector(child: Text("Edited 11:56 am")),
                     GestureDetector(
                         onTap: () {
